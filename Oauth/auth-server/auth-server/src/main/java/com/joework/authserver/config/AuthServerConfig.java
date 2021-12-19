@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 
 @Configuration
 @EnableAuthorizationServer
@@ -24,11 +25,17 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
+//        clients.inMemory()
+//                .withClient("client1")
+//                .secret("pass123")
+//                .scopes("read")
+//                .authorizedGrantTypes("password"); // this will use the grantType => password
         clients.inMemory()
                 .withClient("client1")
                 .secret("pass123")
                 .scopes("read")
-                .authorizedGrantTypes("password"); // this will use the grantType => password
+                .authorizedGrantTypes("authorization_code")
+                .redirectUris("http://localhost:9090"); // there is the client URI that the server should redirect to after success
     }
 
 
@@ -38,4 +45,5 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager);
     }
+
 }
